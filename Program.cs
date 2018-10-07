@@ -12,28 +12,32 @@ namespace IDictionaryOrderTest
         static void Main(string[] args)
         {
             var hashTable = new Hashtable();
-            var dict = new Dictionary<string, object>();
-            var ordered = new OrderedDictionary();
+            var classicDict = new Dictionary<string, object>();
+            var orderedDict = new OrderedDictionary();
             var sortedDict = new SortedDictionary<string, object>();
             var sortedList = new SortedList();
             var hybridDict = new HybridDictionary();
 
-            string keyStr = "alpha"; string key1Str = "bravo"; string key2Str = "charlie"; string key3Str = "foxtrot"; 
-            var keysUsed = new string[] { keyStr, key1Str, key2Str, key3Str };
-            var bagOfDicts = new IDictionary[] { hashTable, dict, ordered, sortedDict, sortedList, hybridDict };
+            string keyStr = "alpha"; 
+            string key1Str = "bravo"; 
+            string key2Str = "charlie"; 
+            string key3Str = "foxtrot"; 
 
-            addToAll(bagOfDicts, keyStr, "hello");
-            addToAll(bagOfDicts, key1Str, new object());
-            addToAll(bagOfDicts, key3Str, true);
-            addToAll(bagOfDicts, key2Str, 123);
+            var keysUsed = new string[] { keyStr, key1Str, key2Str, key3Str };
+            var bagOfDicts = new IDictionary[] { hashTable, classicDict, orderedDict, sortedDict, sortedList, hybridDict };
+
+            addToAllIDictionaries(bagOfDicts, keyStr, "hello");
+            addToAllIDictionaries(bagOfDicts, key1Str, new object());
+            addToAllIDictionaries(bagOfDicts, key3Str, true);
+            addToAllIDictionaries(bagOfDicts, key2Str, 123);
 
             int index = 0;
-            Console.WriteLine("Iterating through keys list");
+            Console.WriteLine("Iterating through keys aplha to foxtrot");
             foreach(var key in keysUsed)
             {
-                foreach(IDictionary dictTypeItem in bagOfDicts)
+                foreach(IDictionary dictionaryItem in bagOfDicts)
                 {
-                    Console.WriteLine(formOutput(dictTypeItem, key, index));
+                    Console.WriteLine(formOutput(dictionaryItem, key, index));
                 }
                 index++;
             }
@@ -41,21 +45,20 @@ namespace IDictionaryOrderTest
             Console.Read();
         }
 
-
-        static string formOutput(IDictionary dictRepresentation, string key, int index)
+        static string formOutput(IDictionary dictionary, string key, int index)
         {
-            var valueType = dictRepresentation[key].GetType().ToString();
-            var keyAtIndex = getKeyAtIndex(dictRepresentation, index);
-            var dictType = dictRepresentation.GetType();
+            var valueType = dictionary[key].GetType().ToString();
+            var keyAtIndex = getKeyAtIndex(dictionary, index);
+            var dictType = dictionary.GetType();
             return $@"Value type: {valueType}, dict.Keys[{index}]: {keyAtIndex}, Dict key: {key}, Dict type: {dictType}";
         }
 
-        static void addToAll(IDictionary[] dicts, string key, object value)
+        static void addToAllIDictionaries(IDictionary[] dicts, string key, object value)
         {
             foreach (var d in dicts) { d.Add(key, value); }
         }
 
-        static string getKeyAtIndex(IDictionary dictObj, int index) =>	dictObj.Keys.OfType<object>().ElementAt(index).ToString();
+        static string getKeyAtIndex(IDictionary dictObj, int index) =>	dictObj.Keys.OfType<string>().ElementAt(index);
 
     }
 }
